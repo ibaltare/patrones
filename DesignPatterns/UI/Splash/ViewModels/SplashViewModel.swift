@@ -8,12 +8,14 @@
 import Foundation
 
 protocol SplashViewModelProtocol {
-        func onViewLoaded()
+    var heroData: [HeroModel] { get }
+    func onViewLoaded()
 }
 
 final class SplashViewModel {
     
     weak var viewDelegate: SplashViewProtocol?
+    private var heroes: [HeroModel] = []
     
     init( viewDelegate: SplashViewProtocol?){
         self.viewDelegate = viewDelegate
@@ -31,8 +33,8 @@ final class SplashViewModel {
                 self.viewDelegate?.showMessage(message: msg)
                 return
             }
-            // TODO: erraglar
-            networkModel.heroes = heroes
+            
+            self.heroes = heroes
             
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) { [weak self] in
                 self?.viewDelegate?.showLoading(false)
@@ -44,6 +46,9 @@ final class SplashViewModel {
 }
 
 extension SplashViewModel: SplashViewModelProtocol {
+    var heroData: [HeroModel] {
+        self.heroes
+    }
     
     func onViewLoaded() {
         viewDelegate?.showLoading(true)

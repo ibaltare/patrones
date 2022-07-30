@@ -11,8 +11,6 @@ final class NetworkModel {
       
     static let shared = NetworkModel()
     
-    var heroes: [HeroModel] = []
-    
     private init() {}
     
     private func networkCall(
