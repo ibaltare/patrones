@@ -9,7 +9,6 @@ import Foundation
 
 protocol HomeViewModelProtocol {
     var dataCount: Int { get }
-    func setHeroes(heroes: [HeroModel])
     func data(for index: Int) -> HeroModel?
     func onItemSelected(at index: Int)
     func onViewLoaded()
@@ -19,8 +18,9 @@ final class HomeViewModel {
     private weak var viewDelegate: HomeViewControllerProtocol?
     private var heroes: [HeroModel] = []
     
-    init(viewDelegate: HomeViewControllerProtocol){
+    init(viewDelegate: HomeViewControllerProtocol, data: [HeroModel]){
         self.viewDelegate = viewDelegate
+        heroes = data
     }
     
     private func loadData(){
@@ -37,10 +37,6 @@ extension HomeViewModel: HomeViewModelProtocol {
     func data(for index: Int) -> HeroModel? {
         guard index < dataCount else { return nil }
         return heroes[index]
-    }
-    
-    func setHeroes(heroes: [HeroModel]) {
-        self.heroes = heroes
     }
     
     func onItemSelected(at index: Int) {

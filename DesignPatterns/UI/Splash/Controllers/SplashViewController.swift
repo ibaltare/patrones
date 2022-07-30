@@ -46,9 +46,9 @@ extension SplashViewController: SplashViewProtocol {
     
     func navigateToHome() {
         let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
-        guard let destination = homeStoryBoard.instantiateInitialViewController() as? HomeViewController else { return }
-        destination.viewModel = HomeViewModel(viewDelegate: destination)
-        destination.viewModel?.setHeroes(heroes: viewModel?.heroData ?? [])
+        guard let data = viewModel?.heroData,
+            let destination = homeStoryBoard.instantiateInitialViewController() as? HomeViewController else { return }
+        destination.viewModel = HomeViewModel(viewDelegate: destination, data: data)
         self.navigationController?.setViewControllers([destination], animated: true)
     }
     
