@@ -7,6 +7,13 @@
 
 import UIKit
 
+protocol DetailViewControllerProtocol: AnyObject {
+    
+    func update(image: URL)
+    func update(description: String?)
+    func update(name: String?)
+}
+
 final class DetailViewController: UIViewController {
     
     @IBOutlet weak var imageView: UIImageView!
@@ -17,33 +24,17 @@ final class DetailViewController: UIViewController {
     @IBOutlet weak var contentImageHeight: NSLayoutConstraint!
     @IBOutlet weak var contentImageWidth: NSLayoutConstraint!
     
-    var data: HeroModel?
+    var viewModel: DetailViewModelProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.delegate = self
-        guard let data = data else { return }
-        
-        update(image: data.photo)
-        update(name: data.name)
-        update(description: data.description)
+        viewModel?.onViewLoaded()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         round()
         showAnimation()
-    }
-    
-    private func update(image: URL) {
-        imageView.setImage(url: image)
-    }
-    
-    private func update(name: String?) {
-        nameLabel.text = name
-    }
-    
-    private func update(description: String?) {
-        descriptionTextView.text = description
     }
     
     private func round(){
@@ -62,6 +53,21 @@ final class DetailViewController: UIViewController {
                 self.contentImageView.transform = CGAffineTransform(scaleX: 1, y: 1)
             } completion: { _ in }
         
+    }
+}
+
+extension DetailViewController: DetailViewControllerProtocol {
+    
+    func update(image: URL) {
+        imageView.setImage(url: image)
+    }
+    
+    func update(name: String?) {
+        nameLabel.text = name
+    }
+    
+    func update(description: String?) {
+        descriptionTextView.text = description
     }
 }
 
